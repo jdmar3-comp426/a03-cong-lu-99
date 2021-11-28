@@ -7,7 +7,100 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 see under the methods section
 */
 
+// Loop over an Array
+let length = 0;
+let citySum = 0;
+let highwaySum = 0;
+let years = [];
+let numHybrids = 0;
 
+mpg_data.forEach(function(item, index, array){
+    citySum += item.city_mpg;
+    highwaySum += item.highway_mpg;
+    length += 1;
+
+    years[years.length] = item.year;
+
+    if (item.hybrid) {
+        numHybrids += 1;
+    }
+});
+
+// take out all hybrids
+var makerHybridArray = [];
+mpg_data.forEach(function(item, index, array) {
+    if(item.hybrid) {
+        makerHybridArray[makerHybridArray.length] = {"make": item.make, "hybrids": item.id};
+    }
+});
+
+function groupBy(objectArray, property) {
+    return objectArray.reduce(function (acc, obj) {
+      let key = obj[property]
+      if (!acc[key]) {
+        acc[key] = []
+      }
+      acc[key].push(obj["hybrids"])
+      return acc
+    }, {})
+  }
+
+let groupByMake = groupBy(makerHybridArray, 'make');
+
+let unorderedArray = [];
+Object.keys(groupByMake).forEach(key => {
+    const maker = {"make": key, "hybrids": groupByMake[key]};
+    unorderedArray[unorderedArray.length] = maker;
+});
+
+unorderedArray.sort((a, b) => (a.hybrids.length < b.hybrids.length ? 1: -1))
+const ordered = unorderedArray;
+
+
+// avgMpgByYearAndHybrid
+let lessInfo = [];
+mpg_data.forEach(function(item, index, array) {
+    lessInfo[lessInfo.length] = {"year": item.year, 
+                                 "hybrid": item.hybrid, 
+                                 "city": item.city_mpg,
+                                 "highway" : item.highway_mpg}
+    
+});
+
+let count = Array(30).fill().map(() => Array(2).fill(0));
+
+function groupingBy(objectArray, property) {
+    return objectArray.reduce(function (acc, obj) {
+      let key = obj[property]
+      if (!acc[key]) {
+        acc[key] = {"hybrid": {"city": 0, 
+                               "highway": 0},
+                    "notHybrid": {"city": 0,
+                                  "highway": 0}
+                    }
+      }
+      if(obj["hybrid"]) {
+          count[key - 2000][0] += 1;
+          acc[key]["hybrid"]["city"] += obj["city"]
+          acc[key]["hybrid"]["highway"] += obj["highway"]
+          
+      } else {
+        count[key - 2000][1] += 1;
+        acc[key]["notHybrid"]["city"] += obj["city"]
+        acc[key]["notHybrid"]["highway"] += obj["highway"]
+        
+      }
+      return acc
+    }, {})
+  }
+let groupByYear = groupingBy(lessInfo, "year");
+Object.keys(groupByYear).forEach(key => {
+    groupByYear[key]["hybrid"]["city"] /= count[key - 2000][0]
+    groupByYear[key]["hybrid"]["highway"] /= count[key - 2000][0]
+    groupByYear[key]["notHybrid"]["city"] /= count[key - 2000][1]
+    groupByYear[key]["notHybrid"]["highway"] /= count[key - 2000][1]
+});
+export const ar = groupByYear;
 /**
  * This object contains data that has to do with every car in the `mpg_data` object.
  *
@@ -20,10 +113,12 @@ see under the methods section
  * @param {allCarStats.ratioHybrids} ratio of cars that are hybrids
  */
 export const allCarStats = {
-    avgMpg: undefined,
-    allYearStats: undefined,
-    ratioHybrids: undefined,
+    avgMpg: {"city" : citySum/length, 
+             "highway" : highwaySum/length},
+    allYearStats: getStatistics(years),
+    ratioHybrids: numHybrids / length,
 };
+
 
 
 /**
@@ -83,7 +178,7 @@ export const allCarStats = {
  *
  * }
  */
-export const moreStats = {
-    makerHybrids: undefined,
-    avgMpgByYearAndHybrid: undefined
+export default {
+    makerHybrids: ordered,
+    avgMpgByYearAndHybrid: ar
 };

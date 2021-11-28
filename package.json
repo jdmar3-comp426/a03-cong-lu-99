@@ -2,7 +2,7 @@
   "name": "a03",
   "version": "2.1.0",
   "type": "module",
-  "description": "",
+  "description": "[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6347850&assignment_repo_type=AssignmentRepo) # a03 We can learn to function in this environment In this assignment, you will implement JavaScript functions according to a specification and manipulate object and array data.",
   "main": " test.js",
   "scripts": {
     "mild_1": "node src/mild/mild_1.js",
@@ -13,5 +13,17 @@
     "spicy_9": "node src/spicy/spicy_9.js"
   },
   "author": "",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdmar3-comp426/a03-cong-lu-99.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jdmar3-comp426/a03-cong-lu-99/issues"
+  },
+  "homepage": "https://github.com/jdmar3-comp426/a03-cong-lu-99#readme"
 }
