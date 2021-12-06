@@ -18,7 +18,15 @@ queries.
  *
  */
 export function searchHighPower(car_data, minHorsepower, minTorque) {
-
+    let unordered = [];
+    car_data.forEach(function(item, index, array) {
+        if(item.horsepower >= minHorsepower && item.torque >= minTorque){
+            unordered.push(item);
+        }
+    });
+    unordered.sort((a, b) => (a.horsepower < b.horsepower ? 1: -1));
+    const ordered = unordered;
+    return ordered;
 }
 
 
@@ -33,7 +41,15 @@ export function searchHighPower(car_data, minHorsepower, minTorque) {
  *
  */
 export function searchMpg(car_data, minCity, minHighway) {
-
+    let unordered = [];
+    car_data.forEach(function(item, index, array) {
+        if(item.highway_mpg >= minHighway && item.city_mpg >= minCity){
+            unordered.push(item);
+        }
+    });
+    unordered.sort((a, b) => (a.highway_mpg < b.highway_mpg ? 1: -1));
+    const ordered = unordered;
+    return ordered;
 }
 
 
@@ -46,9 +62,16 @@ export function searchMpg(car_data, minCity, minHighway) {
  * @returns {[]} array of cars
  */
 export function searchName(car_data, searchTerm) {
-
+    let unordered = [];
+    car_data.forEach(function(item, index, array) {
+        if(item.id.toLowerCase().includes(searchTerm.toLowerCase())){
+            unordered.push(item);
+        }
+    });
+    unordered.sort((a, b) => (a.id.toLowerCase().indexOf(searchTerm.toLowerCase()) < b.id.toLowerCase().indexOf(searchTerm.toLowerCase()) ? 1: -1));
+    const ordered = unordered;
+    return ordered;
 }
-
 
 /**
  * Find all cars made in the years asked for.
@@ -59,5 +82,13 @@ export function searchName(car_data, searchTerm) {
  * @returns {[]} an array of car objects
  */
 export function searchByYear(car_data, years) {
-
+    let unordered = [];
+    car_data.forEach(function(item, index, array) {
+        years.forEach(function(year, yearIndex, yearArray){
+            if(item.year == year){
+                unordered.push(item);
+            }
+        })
+    });
+    return unordered;
 }
